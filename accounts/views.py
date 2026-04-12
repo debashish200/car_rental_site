@@ -27,3 +27,5 @@ class LoginView(APIView):
                 'role': user.role
             })
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
