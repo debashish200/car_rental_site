@@ -17,8 +17,8 @@ class Booking(models.Model):  #booking model
     
     car = models.ForeignKey(Car, on_delete=models.CASCADE,related_name="car_bookings")  #car that is booked
     
-    start_date = models.DateField()  #start date of the booking
-    end_date = models.DateField()  #end date of the booking
+    start_date = models.DateTimeField()  #start date of the booking
+    end_date = models.DateTimeField()  #end date of the booking
     
     total_price=models.DecimalField(max_digits=10, decimal_places=2)  #total price of the booking
     

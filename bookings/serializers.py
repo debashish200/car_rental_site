@@ -8,4 +8,8 @@ class BookingSerializer(serializers.ModelSerializer):
         model=Booking
         fields='__all__'
         
-        
+        read_only_fields = [
+            'customer',
+            'total_price',
+            'status'
+        ]
