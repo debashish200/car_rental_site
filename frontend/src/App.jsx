@@ -2,11 +2,11 @@ import { Routes, Route } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
 
-import Home from "./pages/Home";
-import Cars from "./pages/Cars";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import NotFound from "./pages/NotFound";
+import Home from "./pages/Home/Home";
+import Cars from "./pages/Cars/Cars";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import NotFound from "./pages/NotFound/NotFound";
 
 function App() {
   return (
