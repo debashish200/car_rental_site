@@ -1,7 +1,36 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { logoutUser } from "../../services/authService";
 import "./Navbar.css";
 
 function Navbar() {
+  const navigate = useNavigate();
+
+  // Check if customer is logged in
+  const isLoggedIn = !!localStorage.getItem("access");
+
+  // Handle Logout
+  const handleLogout = async () => {
+    const refreshToken = localStorage.getItem("refresh");
+
+    try {
+      if (refreshToken) {
+        await logoutUser(refreshToken);
+      }
+
+      console.log("Logout successful");
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      // Remove login information
+      localStorage.removeItem("access");
+      localStorage.removeItem("refresh");
+      localStorage.removeItem("role");
+
+      // Redirect to login page
+      navigate("/login");
+    }
+  };
+
   return (
     <header className="navbar">
       <div className="logo">
@@ -29,13 +58,29 @@ function Navbar() {
       </nav>
 
       <div className="nav-buttons">
-        <NavLink className="login-btn" to="/login">
-          Login
-        </NavLink>
 
-        <NavLink className="register-btn" to="/register">
-          Register
-        </NavLink>
+        {isLoggedIn ? (
+          // Show Logout when customer is logged in
+          <button
+            type="button"
+            className="logout-btn"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
+        ) : (
+          // Show Login and Register when customer is not logged in
+          <>
+            <NavLink className="login-btn" to="/login">
+              Login
+            </NavLink>
+
+            <NavLink className="register-btn" to="/register">
+              Register
+            </NavLink>
+          </>
+        )}
+
       </div>
     </header>
   );

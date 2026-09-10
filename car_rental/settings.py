@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'cars',
     'bookings',
     "corsheaders",
+    "rest_framework_simplejwt.token_blacklist"
 
 ]
 
