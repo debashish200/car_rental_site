@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import API from "../../services/api";
-import CarCard from "../../components/CarCard/CarCard";
+import { getCars } from "../../services/carService";
+
 import "./Cars.css";
 
 function Cars() {
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchCars();
@@ -13,10 +14,18 @@ function Cars() {
 
   const fetchCars = async () => {
     try {
-      const response = await API.get("cars/");
+      setLoading(true);
+      setError("");
+
+      const response = await getCars();
+
+      console.log("Cars API Response:", response.data);
+
       setCars(response.data);
     } catch (error) {
-      console.error("Error fetching cars:", error);
+      console.error("Cars API Error:", error);
+
+      setError("Unable to load cars.");
     } finally {
       setLoading(false);
     }
@@ -24,28 +33,55 @@ function Cars() {
 
   if (loading) {
     return (
-      <div className="cars-container">
-        <h2>Loading Cars...</h2>
+      <div className="cars-page">
+        <h2>Loading cars...</h2>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="cars-page">
+        <h2>{error}</h2>
       </div>
     );
   }
 
   return (
-    <div className="cars-container">
-      <h1 className="cars-title">Available Cars</h1>
-
-      <div className="cars-grid">
-        {cars.length > 0 ? (
-          cars.map((car) => (
-            <CarCard
-              key={car.id}
-              car={car}
-            />
-          ))
-        ) : (
-          <h2>No Cars Available</h2>
-        )}
+    <div className="cars-page">
+      <div className="cars-header">
+        <h1>Available Cars</h1>
+        <p>Choose a car that fits your journey.</p>
       </div>
+
+      {cars.length === 0 ? (
+        <div className="no-cars">
+          <h2>No cars available</h2>
+          <p>Please check again later.</p>
+        </div>
+      ) : (
+        <div className="cars-grid">
+          {cars.map((car) => (
+            <div className="car-card" key={car.id}>
+              <h2>{car.name}</h2>
+
+              <p>
+                <strong>Brand:</strong> {car.brand}
+              </p>
+
+              <p>
+                <strong>Model:</strong> {car.model}
+              </p>
+
+              <p>
+                <strong>Price:</strong> ₹{car.price_per_hour} / hour
+              </p>
+
+              <button>View Details</button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
