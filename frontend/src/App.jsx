@@ -4,6 +4,7 @@ import MainLayout from "./layouts/MainLayout";
 
 import Home from "./pages/Home/Home";
 import Cars from "./pages/Cars/Cars";
+import CarDetails from "./pages/CarDetails/CarDetails";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import NotFound from "./pages/NotFound/NotFound";
@@ -24,6 +25,8 @@ function App() {
         <Route index element={<Home />} />
 
         <Route path="cars" element={<Cars />} />
+
+        <Route path="cars/:id" element={<CarDetails />} />
 
         <Route path="login" element={<Login />} />
 

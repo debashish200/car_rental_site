@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getCars } from "../../services/carService";
 
 import "./Cars.css";
 
 function Cars() {
+  const navigate = useNavigate();
   const [cars, setCars] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -77,7 +79,9 @@ function Cars() {
                 <strong>Price:</strong> ₹{car.price_per_hour} / hour
               </p>
 
-              <button>View Details</button>
+              <button onClick={() => navigate(`/cars/${car.id}`)}>
+                View Details
+              </button>
             </div>
           ))}
         </div>
