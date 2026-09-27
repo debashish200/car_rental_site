@@ -1,69 +1,108 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { getCarById } from "../../services/carService";
 
 import "./CarDetails.css";
 
 const BACKEND_URL = "http://127.0.0.1:8000";
+
 function CarDetails() {
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [car, setCar] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) {
+      return "";
+    }
+
+    if (imagePath.startsWith("http")) {
+      return imagePath;
+    }
+
+    return `${BACKEND_URL}${imagePath}`;
+  };
 
   useEffect(() => {
+    const fetchCarDetails = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const response = await getCarById(id);
+
+        console.log("Car details:", response.data);
+
+        setCar(response.data);
+
+        if (
+          response.data.images &&
+          response.data.images.length > 0
+        ) {
+          setSelectedImage(
+            getImageUrl(response.data.images[0].image)
+          );
+
+          setCurrentImageIndex(0);
+        }
+      } catch (error) {
+        console.error("Error fetching car:", error);
+        setError("Unable to load car details.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchCarDetails();
   }, [id]);
 
+  // Previous image
+  const handlePreviousImage = () => {
+    if (!car?.images?.length) return;
 
-  const fetchCarDetails = async () => {
-    try {
-      setLoading(true);
-      setError("");
+    const newIndex =
+      currentImageIndex === 0
+        ? car.images.length - 1
+        : currentImageIndex - 1;
 
-      const response = await getCarById(id);
+    setCurrentImageIndex(newIndex);
 
-      console.log("Car details:", response.data);
-
-      setCar(response.data);
-
-      // Select first image
-      if (
-        response.data.images &&
-        response.data.images.length > 0
-      ) {
-        setSelectedImage(
-  getImageUrl(response.data.images[0].image)
-);
-      }
-
-    } catch (error) {
-      console.error("Error fetching car:", error);
-
-      setError(
-        "Unable to load car details."
-      );
-    } finally {
-      setLoading(false);
-    }
+    setSelectedImage(
+      getImageUrl(car.images[newIndex].image)
+    );
   };
-  const getImageUrl = (imagePath) => {
-  if (!imagePath) {
-    return "";
-  }
 
-  if (imagePath.startsWith("http")) {
-    return imagePath;
-  }
+  // Next image
+  const handleNextImage = () => {
+    if (!car?.images?.length) return;
 
-  return `${BACKEND_URL}${imagePath}`;
-};
+    const newIndex =
+      currentImageIndex === car.images.length - 1
+        ? 0
+        : currentImageIndex + 1;
 
+    setCurrentImageIndex(newIndex);
+
+    setSelectedImage(
+      getImageUrl(car.images[newIndex].image)
+    );
+  };
+
+  // Select thumbnail
+  const handleThumbnailClick = (index) => {
+    setCurrentImageIndex(index);
+
+    setSelectedImage(
+      getImageUrl(car.images[index].image)
+    );
+  };
 
   if (loading) {
     return (
@@ -73,7 +112,6 @@ function CarDetails() {
     );
   }
 
-
   if (error) {
     return (
       <div className="car-details-status">
@@ -81,7 +119,6 @@ function CarDetails() {
       </div>
     );
   }
-
 
   if (!car) {
     return (
@@ -91,215 +128,247 @@ function CarDetails() {
     );
   }
 
-
   return (
     <div className="car-details-page">
 
-      {/* =========================
-          IMAGE SECTION
-      ========================== */}
+      {/* Back Button */}
 
-      <div className="car-gallery">
+      <button
+        className="back-to-cars"
+        onClick={() => navigate("/cars")}
+      >
+        ← Back to Cars
+      </button>
 
-        {/* Main Image */}
 
-        <div className="main-car-image">
+      <div className="car-details-container">
 
-          {selectedImage ? (
-            <img
-              src={selectedImage}
-              alt={car.name}
-            />
-          ) : (
-            <div className="no-image">
-              No Image Available
+        {/* =================================
+            LEFT - IMAGE SLIDER
+        ================================= */}
+
+        <div className="car-gallery">
+
+          <div className="main-image-container">
+
+            {selectedImage ? (
+              <>
+                <img
+                  src={selectedImage}
+                  alt={car.name}
+                  className="main-car-image"
+                />
+
+                {car.images &&
+                  car.images.length > 1 && (
+                    <>
+                      <button
+                        className="slider-arrow previous"
+                        onClick={handlePreviousImage}
+                      >
+                        ‹
+                      </button>
+
+                      <button
+                        className="slider-arrow next"
+                        onClick={handleNextImage}
+                      >
+                        ›
+                      </button>
+                    </>
+                  )}
+
+              </>
+            ) : (
+              <div className="no-image">
+                No Image Available
+              </div>
+            )}
+
+          </div>
+
+
+          {/* Image Counter */}
+
+          {car.images &&
+            car.images.length > 1 && (
+              <div className="image-counter">
+                {currentImageIndex + 1} / {car.images.length}
+              </div>
+            )}
+
+
+          {/* Thumbnails */}
+
+          {car.images &&
+            car.images.length > 0 && (
+
+              <div className="car-thumbnails">
+
+                {car.images.map((image, index) => (
+
+                  <button
+                    key={image.id}
+                    className={
+                      index === currentImageIndex
+                        ? "thumbnail-button active"
+                        : "thumbnail-button"
+                    }
+                    onClick={() =>
+                      handleThumbnailClick(index)
+                    }
+                  >
+                    <img
+                      src={getImageUrl(image.image)}
+                      alt={`${car.name} ${index + 1}`}
+                    />
+                  </button>
+
+                ))}
+
+              </div>
+
+            )}
+
+        </div>
+
+
+        {/* =================================
+            RIGHT - CAR INFORMATION
+        ================================= */}
+
+        <div className="car-information">
+
+          <div className="car-title-section">
+
+            <span className="car-brand">
+              {car.brand}
+            </span>
+
+            <h1>{car.name}</h1>
+
+            <p className="car-model">
+              Model: {car.model}
+            </p>
+
+          </div>
+
+
+          {/* Price */}
+
+          <div className="car-price">
+
+            <span>
+              ₹{car.price_per_hour}
+            </span>
+
+            <small>
+              / hour
+            </small>
+
+          </div>
+
+
+          {/* Specifications */}
+
+          <div className="car-specifications">
+
+            <div className="specification">
+              <span className="spec-label">
+                Fuel Type
+              </span>
+
+              <strong>
+                {car.fuel_type}
+              </strong>
             </div>
-          )}
-
-        </div>
 
 
-        {/* Thumbnail Images */}
+            <div className="specification">
+              <span className="spec-label">
+                Transmission
+              </span>
 
-        {car.images &&
-          car.images.length > 0 && (
-
-            <div className="car-thumbnails">
-
-              {car.images.map((image) => (
-
-                <button
-                  key={image.id}
-                  className={
-                    selectedImage === image.image
-                      ? "thumbnail-button active"
-                      : "thumbnail-button"
-                  }
-                  onClick={() =>
-  setSelectedImage(getImageUrl(image.image))
-}
-                >
-
-                  <img
-  src={getImageUrl(image.image)}
-  alt={`${car.name} ${image.id}`}
-/>
-
-                </button>
-
-              ))}
-
+              <strong>
+                {car.transmission}
+              </strong>
             </div>
 
-          )}
 
-      </div>
+            <div className="specification">
+              <span className="spec-label">
+                Seats
+              </span>
 
-
-      {/* =========================
-          CAR INFORMATION
-      ========================== */}
-
-      <div className="car-information">
-
-        <div className="car-title-section">
-
-          <span className="car-brand">
-            {car.brand}
-          </span>
-
-          <h1>{car.name}</h1>
-
-          <p className="car-model">
-            Model: {car.model}
-          </p>
-
-        </div>
+              <strong>
+                {car.seats}
+              </strong>
+            </div>
 
 
-        {/* Price */}
+            <div className="specification">
+              <span className="spec-label">
+                Location
+              </span>
 
-        <div className="car-price">
-
-          <span>
-            ₹{car.price_per_hour}
-          </span>
-
-          <small>
-            / hour
-          </small>
-
-        </div>
+              <strong>
+                {car.location}
+              </strong>
+            </div>
 
 
-        {/* Car Specifications */}
+            <div className="specification">
+              <span className="spec-label">
+                Availability
+              </span>
 
-        <div className="car-specifications">
-
-          <div className="specification">
-
-            <span className="spec-label">
-              Fuel Type
-            </span>
-
-            <strong>
-              {car.fuel_type}
-            </strong>
-
+              <strong
+                className={
+                  car.is_available
+                    ? "available-text"
+                    : "not-available-text"
+                }
+              >
+                {car.is_available
+                  ? "Available"
+                  : "Not Available"}
+              </strong>
+            </div>
           </div>
 
 
-          <div className="specification">
+          {/* Buttons */}
 
-            <span className="spec-label">
-              Transmission
-            </span>
+          <div className="car-actions">
 
-            <strong>
-              {car.transmission}
-            </strong>
-
-          </div>
-
-
-          <div className="specification">
-
-            <span className="spec-label">
-              Seats
-            </span>
-
-            <strong>
-              {car.seats}
-            </strong>
-
-          </div>
+            <button
+              className="book-button"
+              disabled={!car.is_available}
+              onClick={() =>
+                navigate(`/cars/${car.id}/book`)
+              }
+            >
+              {car.is_available
+                ? "Book Now"
+                : "Currently Unavailable"}
+            </button>
 
 
-          <div className="specification">
-
-            <span className="spec-label">
-              Location
-            </span>
-
-            <strong>
-              {car.location}
-            </strong>
+            <button
+              className="secondary-back-button"
+              onClick={() => navigate("/cars")}
+            >
+              ← Back to Cars
+            </button>
 
           </div>
 
         </div>
-
-
-        {/* Availability */}
-
-        <div className="availability">
-
-          <span
-            className={
-              car.is_available
-                ? "available"
-                : "not-available"
-            }
-          >
-            {car.is_available
-              ? "Available"
-              : "Not Available"}
-          </span>
-
-        </div>
-
-
-        {/* Owner */}
-
-        <div className="car-owner">
-
-          <span>
-            Listed by
-          </span>
-
-          <strong>
-            {car.owner}
-          </strong>
-
-        </div>
-
-
-        {/* Book Button */}
-
-        <button
-          className="book-button"
-          disabled={!car.is_available}
-        >
-          {car.is_available
-            ? "Book Now"
-            : "Currently Unavailable"}
-        </button>
 
       </div>
 
     </div>
   );
 }
-
 
 export default CarDetails;

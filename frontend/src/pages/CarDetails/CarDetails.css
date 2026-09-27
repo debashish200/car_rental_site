@@ -1,85 +1,225 @@
+/* =========================================
+   PAGE
+========================================= */
+
 .car-details-page {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 20px;
+  min-height: 100vh;
 
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 45px;
+  padding: 40px 7% 70px;
 
-  background: #ffffff;
+  background: #f8fafc;
 }
 
 
-/* =========================
+/* =========================================
+   BACK TO CARS
+========================================= */
+
+.back-to-cars {
+  border: none;
+
+  background: transparent;
+
+  color: #374151;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  margin-bottom: 25px;
+
+  padding: 8px 0;
+
+  transition: 0.2s ease;
+}
+
+.back-to-cars:hover {
+  color: #2563eb;
+}
+
+
+/* =========================================
+   MAIN CONTAINER
+========================================= */
+
+.car-details-container {
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  display: grid;
+
+  grid-template-columns: 1.15fr 0.85fr;
+
+  gap: 55px;
+
+  background: #ffffff;
+
+  padding: 35px;
+
+  border-radius: 20px;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+
+/* =========================================
    IMAGE GALLERY
-========================= */
+========================================= */
 
 .car-gallery {
   width: 100%;
 }
 
 
-.main-car-image {
-  width: 100%;
-  height: 480px;
+/* =========================================
+   MAIN IMAGE
+========================================= */
 
-  border-radius: 16px;
+.main-image-container {
+  position: relative;
+
+  width: 100%;
+
+  height: 430px;
+
   overflow: hidden;
 
-  background: #f3f4f6;
+  border-radius: 16px;
+
+  background: #f1f5f9;
 
   display: flex;
+
   align-items: center;
+
   justify-content: center;
 }
 
 
-.main-car-image img {
+.main-car-image {
   width: 100%;
+
   height: 100%;
 
   object-fit: cover;
+
+  display: block;
 }
 
 
-.no-image {
-  color: #777;
-  font-size: 18px;
+/* =========================================
+   SLIDER ARROWS
+========================================= */
+
+.slider-arrow {
+  position: absolute;
+
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  width: 44px;
+
+  height: 44px;
+
+  border-radius: 50%;
+
+  border: none;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  color: #111827;
+
+  font-size: 32px;
+
+  line-height: 1;
+
+  cursor: pointer;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
+  transition: 0.2s ease;
+
+  z-index: 2;
 }
 
 
-/* =========================
+.slider-arrow:hover {
+  background: #ffffff;
+
+  transform: translateY(-50%) scale(1.05);
+}
+
+
+.slider-arrow.previous {
+  left: 15px;
+}
+
+
+.slider-arrow.next {
+  right: 15px;
+}
+
+
+/* =========================================
+   IMAGE COUNTER
+========================================= */
+
+.image-counter {
+  text-align: center;
+
+  font-size: 13px;
+
+  color: #64748b;
+
+  margin-top: 10px;
+}
+
+
+/* =========================================
    THUMBNAILS
-========================= */
+========================================= */
 
 .car-thumbnails {
   display: flex;
+
   gap: 12px;
 
-  margin-top: 15px;
+  margin-top: 18px;
 
   overflow-x: auto;
+
   padding-bottom: 5px;
 }
 
 
 .thumbnail-button {
-  width: 90px;
-  height: 70px;
+  flex-shrink: 0;
+
+  width: 82px;
+
+  height: 65px;
 
   padding: 0;
 
   border: 2px solid transparent;
-  border-radius: 10px;
+
+  border-radius: 9px;
 
   overflow: hidden;
 
-  background: transparent;
+  background: #f1f5f9;
 
   cursor: pointer;
-
-  flex-shrink: 0;
 
   transition: 0.2s ease;
 }
@@ -87,14 +227,17 @@
 
 .thumbnail-button img {
   width: 100%;
+
   height: 100%;
 
   object-fit: cover;
+
+  display: block;
 }
 
 
 .thumbnail-button:hover {
-  transform: translateY(-2px);
+  border-color: #94a3b8;
 }
 
 
@@ -103,65 +246,100 @@
 }
 
 
-/* =========================
-   INFORMATION
-========================= */
+/* =========================================
+   NO IMAGE
+========================================= */
 
-.car-information {
-  padding: 10px 5px;
-}
-
-
-.car-title-section {
-  border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 20px;
-}
-
-
-.car-brand {
-  color: #2563eb;
-
-  font-size: 15px;
-  font-weight: 600;
-
-  text-transform: uppercase;
-}
-
-
-.car-title-section h1 {
-  margin: 8px 0;
-
-  font-size: 36px;
-  line-height: 1.2;
-
-  color: #111827;
-}
-
-
-.car-model {
-  margin: 0;
-
-  color: #6b7280;
+.no-image {
+  color: #64748b;
 
   font-size: 16px;
 }
 
 
-/* =========================
+/* =========================================
+   CAR INFORMATION
+========================================= */
+
+.car-information {
+  display: flex;
+
+  flex-direction: column;
+
+  justify-content: center;
+}
+
+
+/* =========================================
+   TITLE
+========================================= */
+
+.car-title-section {
+  margin-bottom: 18px;
+}
+
+
+.car-brand {
+  display: inline-block;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: 1px;
+
+  color: #2563eb;
+
+  margin-bottom: 7px;
+}
+
+
+.car-title-section h1 {
+  margin: 0;
+
+  font-size: 38px;
+
+  color: #111827;
+
+  font-weight: 700;
+}
+
+
+.car-model {
+  margin-top: 7px;
+
+  color: #64748b;
+
+  font-size: 15px;
+}
+
+
+/* =========================================
    PRICE
-========================= */
+========================================= */
 
 .car-price {
-  margin: 25px 0;
-
   display: flex;
+
   align-items: baseline;
+
   gap: 6px;
+
+  padding: 18px 0;
+
+  border-top: 1px solid #e5e7eb;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  margin-bottom: 22px;
 }
 
 
 .car-price span {
-  font-size: 32px;
+  font-size: 30px;
+
   font-weight: 700;
 
   color: #111827;
@@ -169,115 +347,90 @@
 
 
 .car-price small {
-  font-size: 16px;
+  font-size: 14px;
 
-  color: #6b7280;
+  color: #64748b;
 }
 
 
-/* =========================
+/* =========================================
    SPECIFICATIONS
-========================= */
+========================================= */
 
 .car-specifications {
   display: grid;
 
   grid-template-columns: 1fr 1fr;
 
-  gap: 15px;
+  gap: 14px;
 
-  margin: 25px 0;
+  margin-bottom: 25px;
 }
 
 
 .specification {
-  padding: 16px;
+  padding: 15px;
 
   border-radius: 10px;
 
   background: #f8fafc;
 
   border: 1px solid #e5e7eb;
-}
 
-
-.spec-label {
-  display: block;
-
-  margin-bottom: 6px;
-
-  font-size: 13px;
-
-  color: #6b7280;
-}
-
-
-.specification strong {
-  font-size: 16px;
-
-  color: #111827;
-}
-
-
-/* =========================
-   AVAILABILITY
-========================= */
-
-.availability {
-  margin: 20px 0;
-}
-
-
-.available,
-.not-available {
-  display: inline-block;
-
-  padding: 8px 14px;
-
-  border-radius: 20px;
-
-  font-size: 14px;
-  font-weight: 600;
-}
-
-
-.available {
-  color: #166534;
-  background: #dcfce7;
-}
-
-
-.not-available {
-  color: #991b1b;
-  background: #fee2e2;
-}
-
-
-/* =========================
-   OWNER
-========================= */
-
-.car-owner {
   display: flex;
 
   flex-direction: column;
 
   gap: 5px;
-
-  margin: 20px 0;
-
-  color: #6b7280;
 }
 
 
-.car-owner strong {
-  color: #111827;
+.spec-label {
+  font-size: 12px;
+
+  color: #64748b;
+
+  font-weight: 500;
 }
 
 
-/* =========================
-   BOOK BUTTON
-========================= */
+.specification strong {
+  font-size: 15px;
+
+  color: #1f2937;
+}
+
+
+/* =========================================
+   AVAILABILITY
+========================================= */
+
+.available-text {
+  color: #15803d !important;
+}
+
+
+.not-available-text {
+  color: #dc2626 !important;
+}
+
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+.car-actions {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 11px;
+
+  margin-top: 5px;
+}
+
+
+/* Book Now */
 
 .book-button {
   width: 100%;
@@ -285,13 +438,15 @@
   padding: 15px;
 
   border: none;
+
   border-radius: 10px;
 
   background: #2563eb;
 
-  color: white;
+  color: #ffffff;
 
-  font-size: 17px;
+  font-size: 16px;
+
   font-weight: 600;
 
   cursor: pointer;
@@ -302,6 +457,8 @@
 
 .book-button:hover:not(:disabled) {
   background: #1d4ed8;
+
+  transform: translateY(-1px);
 }
 
 
@@ -312,41 +469,73 @@
 }
 
 
-/* =========================
-   LOADING / ERROR
-========================= */
+/* Back button */
 
-.car-details-status {
-  min-height: 400px;
+.secondary-back-button {
+  width: 100%;
 
-  display: flex;
+  padding: 14px;
 
-  justify-content: center;
-  align-items: center;
+  border: 1px solid #d1d5db;
 
-  font-size: 18px;
+  border-radius: 10px;
 
-  color: #555;
+  background: #ffffff;
+
+  color: #374151;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
 }
 
 
-/* =========================
+.secondary-back-button:hover {
+  background: #f8fafc;
+
+  border-color: #94a3b8;
+}
+
+
+/* =========================================
+   LOADING / ERROR
+========================================= */
+
+.car-details-status {
+  min-height: 60vh;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  color: #64748b;
+
+  font-size: 16px;
+}
+
+
+/* =========================================
    RESPONSIVE
-========================= */
+========================================= */
 
 @media (max-width: 900px) {
 
-  .car-details-page {
+  .car-details-container {
     grid-template-columns: 1fr;
 
-    gap: 30px;
+    gap: 35px;
 
-    margin: 20px auto;
+    padding: 25px;
   }
 
-
-  .main-car-image {
-    height: 400px;
+  .main-image-container {
+    height: 380px;
   }
 
 }
@@ -355,33 +544,45 @@
 @media (max-width: 600px) {
 
   .car-details-page {
-    padding: 15px;
+    padding: 25px 15px 50px;
   }
 
+  .car-details-container {
+    padding: 18px;
 
-  .main-car-image {
+    border-radius: 15px;
+  }
+
+  .main-image-container {
     height: 280px;
-  }
 
+    border-radius: 12px;
+  }
 
   .car-title-section h1 {
-    font-size: 28px;
+    font-size: 30px;
   }
-
 
   .car-price span {
-    font-size: 27px;
+    font-size: 26px;
   }
-
 
   .car-specifications {
     grid-template-columns: 1fr;
   }
 
-
   .thumbnail-button {
-    width: 75px;
-    height: 60px;
+    width: 70px;
+
+    height: 55px;
+  }
+
+  .slider-arrow {
+    width: 38px;
+
+    height: 38px;
+
+    font-size: 27px;
   }
 
 }
