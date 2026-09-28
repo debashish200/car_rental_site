@@ -14,6 +14,7 @@ import MyCars from "./pages/MyCars/MyCars";
 
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import RoleRoute from "./components/RoleRoute/RoleRoute";
+import Booking from "./pages/Booking/Booking";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route path="cars" element={<Cars />} />
 
         <Route path="cars/:id" element={<CarDetails />} />
+        <Route path="cars/:id/book" element={<Booking />} />
 
         <Route path="login" element={<Login />} />
 
