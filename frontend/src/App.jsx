@@ -15,6 +15,9 @@ import MyCars from "./pages/MyCars/MyCars";
 import ProtectedRoute from "./components/ProtectedRoute/ProtectedRoute";
 import RoleRoute from "./components/RoleRoute/RoleRoute";
 import Booking from "./pages/Booking/Booking";
+import AddCar from "./pages/AddCar/AddCar";
+import EditCar from "./pages/EditCar/EditCar";
+
 
 function App() {
   return (
@@ -45,6 +48,8 @@ function App() {
           {/* Agency Owner Routes */}
           <Route element={<RoleRoute allowedRoles={["agency"]} />}>
             <Route path="my-cars" element={<MyCars />} />
+            <Route path="my-cars/add" element={<AddCar />} />
+            <Route path="my-cars/edit/:id" element={<EditCar />} />
           </Route>
 
         </Route>

@@ -18,4 +18,16 @@ export const updateCar = (id, data) => {
 
 export const deleteCar = (id) => {
   return API.delete(`cars/${id}/`);
+};  
+
+export const uploadCarImages = (carId, formData) => {
+  return API.post(`cars/${carId}/images/`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+export const deleteCarImage = (imageId) => {
+  return API.delete(`cars/images/${imageId}/`);
 };

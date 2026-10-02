@@ -29,3 +29,8 @@ class CarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = "__all__"
+        
+class CarImageUploadSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CarImage
+        fields = ["image"]
